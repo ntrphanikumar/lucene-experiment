@@ -1,17 +1,19 @@
 package exp.phani.lucene;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.FSDirectory;
 
-public class InMemoryLuceneIndexSearch extends AbstractLuceneIndexSearch {
-    public InMemoryLuceneIndexSearch() {
-        super(new RAMDirectory());
+public class PersistedLuceneIndexSearch extends AbstractLuceneIndexSearch {
+    
+    public PersistedLuceneIndexSearch() throws IOException {
+        super(FSDirectory.open(Paths.get("_index")));
     }
     
     public static void main(String[] args) throws IOException, ParseException {
-        LuceneIndexSearch luceneIndexSearch = new InMemoryLuceneIndexSearch();
+        LuceneIndexSearch luceneIndexSearch = new PersistedLuceneIndexSearch();
         luceneIndexSearch.index("Lucene in Action", "193398817");
         luceneIndexSearch.index("Lucene for Dummies", "55320055Z");
         luceneIndexSearch.index("Managing Gigabytes", "55063554A");
