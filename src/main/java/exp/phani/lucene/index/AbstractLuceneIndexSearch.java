@@ -1,4 +1,4 @@
-package exp.phani.lucene;
+package exp.phani.lucene.index;
 
 import java.io.IOException;
 
@@ -19,7 +19,9 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 
-public abstract class AbstractLuceneIndexSearch implements LuceneIndexSearch {
+import exp.phani.lucene.entity.Documentable;
+
+public abstract class AbstractLuceneIndexSearch<T extends Documentable> implements LuceneIndexSearch<T> {
     private final StandardAnalyzer analyzer = new StandardAnalyzer();
     private final Directory directory;
     
@@ -28,9 +30,9 @@ public abstract class AbstractLuceneIndexSearch implements LuceneIndexSearch {
     }
     
     @Override
-    public final void index(String title, String isbn) throws IOException {
+    public final void index(T entity) throws IOException {
         IndexWriter w = new IndexWriter(directory, new IndexWriterConfig(analyzer));
-        w.addDocument(createDocument(title, isbn));
+        w.addDocument(entity.toDocument());
         w.close();
     }
     
@@ -50,11 +52,4 @@ public abstract class AbstractLuceneIndexSearch implements LuceneIndexSearch {
         }
     }
     
-    private Document createDocument(String title, String isbn) {
-        Document doc = new Document();
-        doc.add(new TextField("title", title, Field.Store.YES));
-        doc.add(new StringField("isbn", isbn, Field.Store.YES));
-        return doc;
-    }
-
 }
