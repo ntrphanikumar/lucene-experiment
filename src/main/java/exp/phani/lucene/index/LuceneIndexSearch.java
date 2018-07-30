@@ -1,6 +1,7 @@
 package exp.phani.lucene.index;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -10,6 +11,6 @@ public interface LuceneIndexSearch<T extends Documentable> {
 
     void index(T entity) throws IOException;
 
-    void search(String title) throws ParseException, IOException;
+    List<T> search(String field, String value) throws ParseException, IOException;
 
 }
